@@ -2,15 +2,15 @@
 
 dDatabase is a secure, distributed append-only log.
 
-Built for sharing large datasets and streams of real time data as part of the [dWeb protocol suite](https://dwebx.foundation).
+Built for sharing large datasets and streams of real time data as part of the [dWeb protocol suite](https://dwebx.org).
 
 ``` sh
 npm install ddatabase
 ```
 
-[![Build Status](https://travis-ci.org/distributedweb/ddatabase.svg?branch=master)](https://travis-ci.org/distributedweb/ddatabase)
+[![Build Status](https://travis-ci.org/dwebprotocol/ddatabase.svg?branch=master)](https://travis-ci.org/dwebprotocol/ddatabase)
 
-To learn more about how ddatabase works on a technical level read the [DWebX paper](https://github.com/datprotocol/whitepaper/blob/master/dwebx-paper.pdf).
+To learn more about how ddatabase works on a technical level read the [DWebX paper](https://github.com/dwebprotocol/whitepaper).
 
 ## Features
 
@@ -99,7 +99,7 @@ Per default ddatabase uses [random-access-file](https://github.com/random-access
 }
 ```
 
-You can also set valueEncoding to any [abstract-encoding](https://github.com/distributedweb/abstract-encoding) instance.
+You can also set valueEncoding to any [abstract-encoding](https://github.com/dwebprotocol/abstract-encoding) instance.
 
 __Note:__ The `[key]` and `secretKey` are _Node.js_ buffer instances, not browser-based ArrayBuffer instances. When creating ddatabases in browser, if you pass an ArrayBuffer instance, you will get an error similar to `key must be at least 16, was given undefined`. Instead, create a Node.js Buffer instance using [Feross‘s](https://github.com/feross) [buffer](https://github.com/feross/buffer) module (`npm install buffer`). e.g.,
 
@@ -108,9 +108,9 @@ const storage = someRandomAccessStorage
 const myPublicKey = someUint8Array
 
 const Buffer = require('buffer').Buffer
-const hypercorePublicKeyBuffer = Buffer.from(myPublicKey.buffer)
+const ddatabasePublicKeyBuffer = Buffer.from(myPublicKey.buffer)
 
-const ddatabase = ddatabase(storage, hypercorePublicKeyBuffer)
+const ddatabase = ddatabase(storage, ddatabasePublicKeyBuffer)
 ```
 
 #### `feed.append(data, [callback])`
@@ -323,7 +323,7 @@ Create a replication stream. You should pipe this to another ddatabase instance.
 The `isInitiator` argument is a boolean indicating whether you are the iniatior of the connection (ie the client)
 or if you are the passive part (ie the server).
 
-If you are using a P2P swarm like [dWebSwarm](https://github.com/dwebswarm/dwebswarm) you can know this by checking if the swarm connection is a client socket or server socket. In dWebSwarm you can check that using [client property on the peer details object](https://github.com/dwebswarm/dwebswarm#swarmonconnection-socket-details--)
+If you are using a P2P swarm like [dSwarm](https://github.com/dwebprotocol/dswarm) you can know this by checking if the swarm connection is a client socket or server socket. In dSwarm you can check that using [client property on the peer details object](https://github.com/dwebprotocol/dswarm#swarmonconnection-socket-details--)
 
 If you want to multiplex the replication over an existing ddatabase replication stream you can pass
 another stream instance instead of the `isInitiator` boolean.
@@ -536,10 +536,10 @@ Emitted when the feed has been fully closed
 
 dDatabase works really well with a series of other modules. This in a non-exhaustive list of some of those:
 
-* [dWebSwarm](https://github.com/distributedweb/dwebswarm) - P2P swarming module that can you share dDatabases over a network.
-* [dWebSwarm replicator](https://github.com/distributedweb/dwebswarm-replicator) - Wanna share a single dDatabase without any hastle over a network?
-* [dDrive](https://github.com/distributedweb/ddrive) - Filesystem abstraction built on dDatabases
-* [dWebTrie](https://github.com/distributedweb/dwebtrie) - Scalable key/value store built on dDatabases
+* [dSwarm](https://github.com/dwebprotocol/dwebswarm) - P2P swarming module that can you share dDatabases over a network.
+* [dSwarm replicator](https://github.com/dwebprotocol/replicator) - Wanna share a single dDatabase without any hastle over a network?
+* [dDrive](https://github.com/dwebprotocol/ddrive) - Filesystem abstraction built on dDatabases
+* [dWebTrie](https://github.com/dwebprotocol/dwebtrie) - Scalable key/value store built on dDatabases
 
 ## License
 
