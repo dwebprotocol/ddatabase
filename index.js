@@ -10,17 +10,17 @@ var bitfield = require('./lib/bitfield')
 var sparseBitfield = require('sparse-bitfield')
 var treeIndex = require('./lib/tree-index')
 var storage = require('./lib/storage')
-var crypto = require('hypercore-crypto')
+var crypto = require('@ddatabase/crypto')
 var inspect = require('inspect-custom-symbol')
 var pretty = require('pretty-hash')
 var Nanoguard = require('nanoguard')
 var safeBufferEquals = require('./lib/safe-buffer-equals')
 var replicate = require('./lib/replicate')
-var Protocol = require('hypercore-protocol')
+var Protocol = require('@ddatabase/protocol')
 var Message = require('abstract-extension')
 var Nanoresource = require('nanoresource/emitter')
-var defaultStorage = require('hypercore-default-storage')
-var { WriteStream, ReadStream } = require('hypercore-streams')
+var defaultStorage = require('@ddatabase/default-storage')
+var { WriteStream, ReadStream } = require('@ddatabase/streams')
 
 class Extension extends Message {
   broadcast (message) {
@@ -171,7 +171,7 @@ Feed.prototype[inspect] = function (depth, opts) {
   if (typeof opts.indentationLvl === 'number') {
     while (indent.length < opts.indentationLvl) indent += ' '
   }
-  return 'Hypercore(\n' +
+  return 'DDatabase(\n' +
     indent + '  key: ' + opts.stylize((this.key && pretty(this.key)), 'string') + '\n' +
     indent + '  discoveryKey: ' + opts.stylize((this.discoveryKey && pretty(this.discoveryKey)), 'string') + '\n' +
     indent + '  opened: ' + opts.stylize(this.opened, 'boolean') + '\n' +
@@ -316,7 +316,7 @@ Feed.prototype.setExpectedLength = function (len) {
   })
 }
 
-// Beware! This might break your core if you share forks with other people through replication
+// Beware! This might break your base if you share forks with other people through replication
 Feed.prototype.truncate = function (newLength, cb) {
   if (!cb) cb = noop
   const self = this
@@ -476,7 +476,7 @@ Feed.prototype._open = function (cb) {
     self._seq = self.length
 
     if (state.key && self.key && Buffer.compare(state.key, self.key) !== 0) {
-      return self._forceClose(cb, new Error('Another hypercore is stored here'))
+      return self._forceClose(cb, new Error('Another dDatabase is stored here'))
     }
 
     if (state.key) self.key = state.key
@@ -489,7 +489,7 @@ Feed.prototype._open = function (cb) {
       if (self.length) self.live = !!sig
 
       if ((generatedKey || !self.key) && !self._createIfMissing) {
-        return self._forceClose(cb, new Error('No hypercore is stored here'))
+        return self._forceClose(cb, new Error('No dDatabase is stored here'))
       }
 
       if (!self.key && self.live) {
@@ -1271,7 +1271,7 @@ Feed.prototype.get = function (index, opts, cb) {
   if (typeof opts === 'function') return this.get(index, null, opts)
 
   opts = { ...opts }
-  if (!opts.cancel) opts.cancel = Symbol('hypercore-get')
+  if (!opts.cancel) opts.cancel = Symbol('ddatabase-get')
 
   if (!this.opened) return this._readyAndGet(index, opts, cb)
 
@@ -1489,7 +1489,7 @@ Feed.prototype._append = function (batch, cb) {
     var nodes = this._merkle.next(data)
 
     // the replication stream rejects frames >8MB for DOS defense. Is configurable there, so
-    // we could bubble that up here. For now just hardcode it so you can't accidentally "brick" your core
+    // we could bubble that up here. For now just hardcode it so you can't accidentally "brick" your base
     // note: this is *only* for individual blocks and is just a sanity check. most blocks are <1MB
     if (data.length > 8388608) return cb(new Error('Individual blocks has be less than 8MB'))
 
