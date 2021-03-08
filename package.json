@@ -1,6 +1,6 @@
 {
   "name": "ddatabase",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "description": "A distributed and secure append-only log for the dWeb.",
   "main": "index.js",
   "dependencies": {
